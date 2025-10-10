@@ -1,16 +1,15 @@
 using System;
 using AutoMapper;
-using Domain;
 using MediatR;
 using Persistence;
 
 namespace Application.Activities.Commands;
 
-public class EditActivity
+public class DeleteActivity
 {
     public class Command : IRequest
     {
-        public required Activity Activity { get; set; }
+        public required string Id { get; set; }
     }
 
     public class Handler(AppDbContext context, IMapper mapper) : IRequestHandler<Command>
@@ -18,12 +17,10 @@ public class EditActivity
         public async Task Handle(Command request, CancellationToken cancellationToken)
         {
             var activity = await context.Activities
-                    .FindAsync([request.Activity.Id], cancellationToken)
-                    ?? throw new Exception("Activity not found");
+                   .FindAsync([request.Id], cancellationToken)
+                   ?? throw new Exception("Activity not found");
 
-            // context.Entry(activity).CurrentValues.SetValues(request.Activity); //suggested by chatgpt
-
-            mapper.Map(request.Activity, activity);
+            context.Remove(activity);
 
             await context.SaveChangesAsync(cancellationToken);
 
