@@ -12,7 +12,7 @@ public class DeleteActivity
         public required string Id { get; set; }
     }
 
-    public class Handler(AppDbContext context, IMapper mapper) : IRequestHandler<Command>
+    public class Handler(AppDbContext context) : IRequestHandler<Command>
     {
         public async Task Handle(Command request, CancellationToken cancellationToken)
         {
