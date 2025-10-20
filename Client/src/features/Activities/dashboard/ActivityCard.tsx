@@ -7,7 +7,7 @@ type Props = {
 
 export default function ActivityCard({ activity, selectActivity }: Props) {
   return (
-    <Card sx={{ mb: 2, p: 2, borderRadius: 3 }}>
+    <Card sx={{ p: 3, borderRadius: 3 }}>
       <CardContent>
         <Typography variant="h5">{activity.title}</Typography>
         <Typography sx={{ color: "text.secondary", mb: 1 }}>{activity.date}</Typography>
@@ -16,9 +16,15 @@ export default function ActivityCard({ activity, selectActivity }: Props) {
           {activity.city} / {activity.venue}
         </Typography>
       </CardContent>
-      <CardActions sx={{ display: "flex", justifyContent: "space-between", pb: 2 }}>
+      <CardActions sx={{ display: "flex", justifyContent: "space-between" }}>
         <Chip label={activity.category} variant="outlined" />
-        <Button onClick={() => selectActivity(activity.id)} size="medium" variant="contained">
+        <Button
+          onClick={() => {
+            selectActivity(activity.id)
+          }}
+          size="medium"
+          variant="contained"
+        >
           View
         </Button>
       </CardActions>
