@@ -4,9 +4,10 @@ import type { FormEvent } from "react";
 type Props = {
   activity?: Activity;
   closeForm: () => void;
+  submitForm: (activity: Activity) => void;
 };
 
-export default function ActivityForm({ activity, closeForm }: Props) {
+export default function ActivityForm({ activity, closeForm, submitForm }: Props) {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -15,7 +16,9 @@ export default function ActivityForm({ activity, closeForm }: Props) {
       data[key] = value;
     });
 
-    console.log(data);
+    if (activity) data.id = activity.id;
+
+    submitForm(data as unknown as Activity);
   };
 
   return (
@@ -24,18 +27,18 @@ export default function ActivityForm({ activity, closeForm }: Props) {
         Create activity
       </Typography>
       <Box component="form" onSubmit={handleSubmit} display="flex" flexDirection="column" gap={3}>
-        <TextField name="Title" label="Title" defaultValue={activity?.title} />
+        <TextField name="title" label="Title" defaultValue={activity?.title} />
         <TextField
-          name="Description"
+          name="description"
           label="Description"
           defaultValue={activity?.description}
           multiline
           rows={3}
         />
-        <TextField name="Category" label="Category" defaultValue={activity?.category} />
-        <TextField name="Date" label="Date" defaultValue={activity?.date} type="date" />
-        <TextField name="City" label="City" defaultValue={activity?.city} />
-        <TextField name="Venue" label="Venue" defaultValue={activity?.venue} />
+        <TextField name="category" label="Category" defaultValue={activity?.category} />
+        <TextField name="date" label="Date" defaultValue={activity?.date} type="date" />
+        <TextField name="city" label="City" defaultValue={activity?.city} />
+        <TextField name="venue" label="Venue" defaultValue={activity?.venue} />
         <Box display="flex" justifyContent="end" gap={3} marginTop={3}>
           <Button onClick={closeForm} color="inherit">
             Cancel
