@@ -1,22 +1,14 @@
 import { Box, Container, CssBaseline, Typography } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { useState } from "react";
 import ActivityDashboard from "../../features/Activities/dashboard/ActivityDashboard";
 import NavBar from "./NavBar";
 import "./styles.css";
+import { useActivities } from "../../lib/hooks/useActivities";
 
 function App() {
   const [selectedActivity, setSelectedActivity] = useState<Activity | undefined>(undefined);
   const [editMode, setEditMode] = useState<boolean>(false);
-
-  const { data: activities, isPending } = useQuery({
-    queryKey: ["activities"],
-    queryFn: async () => {
-      const response = await axios.get<Activity[]>("https://localhost:5001/api/activities");
-      return response.data;
-    },
-  });
+  const {activities, isPending} = useActivities();
 
   const handleSelectActivity = (id: string) => {
     setSelectedActivity(activities!.find((x) => x.id === id));
@@ -54,12 +46,12 @@ function App() {
   };
 
   return (
-    <Box sx={{ backgroundColor: "#eeeeee" }}>
+    <Box sx={{ backgroundColor: "#eeeeee", minHeight: "100vh" }}>
       <CssBaseline />
       <NavBar openForm={handleOpenForm} />
       <Container maxWidth="xl" sx={{ mt: 3 }}>
         {!activities || isPending ? (
-          <Typography>Loading...</Typography>
+          <Typography align="center">Loading...</Typography>
         ) : (
           <ActivityDashboard
             activities={activities}
