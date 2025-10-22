@@ -1,10 +1,12 @@
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import type { FormEvent } from "react";
+import { useNavigate, useParams } from "react-router";
 import { useActivities } from "../../lib/hooks/useActivities";
 
 export default function ActivityForm() {
-  const { updateActivity, createActivity } = useActivities();
-  const activity = {} as Activity;
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const { updateActivity, createActivity, activity, IsLoadingActivity } = useActivities(id);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -17,10 +19,17 @@ export default function ActivityForm() {
     if (activity) {
       data.id = activity.id;
       await updateActivity.mutateAsync(data as unknown as Activity);
+      navigate(`/activities/${activity?.id}`);
     } else {
-      await createActivity.mutateAsync(data as unknown as Activity);
+      await createActivity.mutateAsync(data as unknown as Activity, {
+        onSuccess: (id) => {
+          navigate(`/activities/${id}`);
+        },
+      });
     }
   };
+
+  if (IsLoadingActivity) return <Typography>Loading activity...</Typography>;
 
   return (
     <Paper sx={{ borderRadius: 3, padding: 3 }}>
@@ -50,7 +59,9 @@ export default function ActivityForm() {
         <TextField name="city" label="City" defaultValue={activity?.city} />
         <TextField name="venue" label="Venue" defaultValue={activity?.venue} />
         <Box display="flex" justifyContent="end" gap={3} marginTop={3}>
-          <Button color="inherit">Cancel</Button>
+          <Button onClick={() => navigate("/activities")} color="inherit">
+            Cancel
+          </Button>
           <Button
             type="submit"
             color="success"
