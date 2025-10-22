@@ -10,11 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 
-type Props = {
-  openForm: () => void;
-};
-
-export default function NavBar({ openForm }: Props) {
+export default function NavBar() {
   return (
     <>
       <CssBaseline />
@@ -56,7 +52,7 @@ export default function NavBar({ openForm }: Props) {
                   </Typography>
                 </MenuItem>
               </Box>
-              <Button onClick={openForm} size="large" variant="contained" color="warning">
+              <Button onClick={() => {}} size="large" variant="contained" color="warning">
                 Create Activity
               </Button>
             </Toolbar>

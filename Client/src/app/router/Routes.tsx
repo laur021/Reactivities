@@ -1,0 +1,17 @@
+import ActivityForm from "../../features/Activities/ActivityForm";
+import ActivityDashboard from "../../features/Activities/dashboard/ActivityDashboard";
+import HomePage from "../../features/home/HomePage";
+import App from "../layout/App";
+import { createBrowserRouter } from "react-router";
+
+export const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <App />,
+        children: [
+            {path: '', element: <HomePage />},
+            {path: 'activities', element: <ActivityDashboard />},
+            {path: 'createActivity', element: <ActivityForm />}
+        ]
+    }
+]);
