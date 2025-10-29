@@ -1,3 +1,4 @@
+using API.Middleware;
 using Application.Activities.Queries;
 using Application.Activities.Validators;
 using Application.Core;
@@ -24,15 +25,15 @@ builder.Services.AddMediatR(x =>
 });
 builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 builder.Services.AddValidatorsFromAssemblyContaining<CreateActivityValidator>();
+builder.Services.AddTransient<ExceptionMiddleware>();
 
 var app = builder.Build();
-
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors(x => x.AllowAnyHeader()
                 .AllowAnyMethod()
                 .WithOrigins("http://localhost:3000", "https://localhost:3000"));
 
 app.MapControllers();
-
 
 /*Now, what this means is that when this method, when this function goes outside of scope, as in we then run our application. Anything that we use inside here is going to be disposed of by the framework. And it's not something that we need to clean up after ourselves because we're using this using keyword.
 */
