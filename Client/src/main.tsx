@@ -8,7 +8,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
+import "react-toastify/dist/ReactToastify.css";
 import "./app/layout/styles.css";
 import { router } from "./app/router/Routes";
 import { store, StoreContext } from "./lib/stores/store";
