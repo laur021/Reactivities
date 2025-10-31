@@ -1,5 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
+import { router } from "../../app/router/Routes";
 import { store } from "../stores/store";
 
 const sleep = (delay: number) => {
@@ -29,13 +30,13 @@ agent.interceptors.response.use(
     const { status } = error.response;
     switch (status) {
       case 400:
-        toast.error("bad request");
+        toast.error("Bad request");
         break;
       case 401:
         toast.error("Unauthorized");
         break;
       case 404:
-        toast.error("Not found");
+        router.navigate("/not-found");
         break;
       case 500:
         toast.error("Server error");
