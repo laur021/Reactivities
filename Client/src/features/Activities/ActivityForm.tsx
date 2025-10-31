@@ -1,18 +1,18 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Button, Paper, TextField, Typography } from "@mui/material";
+import { Box, Button, Paper, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 import { useActivities } from "../../lib/hooks/useActivities";
 import { activitySchema, type ActivitySchema } from "../../lib/schemas/activitySchema";
+import TextInput from "../../shared/components/TextInput";
 
 export default function ActivityForm() {
   const navigate = useNavigate();
   const {
-    register,
+    control,
     reset,
-    handleSubmit,
-    formState: { errors },
+    handleSubmit
   } = useForm<ActivitySchema>({
     mode: "onTouched",
     resolver: zodResolver(activitySchema),
@@ -42,55 +42,12 @@ export default function ActivityForm() {
         flexDirection="column"
         gap={3}
       >
-        <TextField
-          {...register("title")}
-          label="Title"
-          defaultValue={activity?.title}
-          error={!!errors.title}
-          helperText={errors.title?.message}
-        />
-        <TextField
-          {...register("description")}
-          label="Description"
-          defaultValue={activity?.description}
-          error={!!errors.description}
-          helperText={errors.description?.message}
-          multiline
-          rows={3}
-        />
-        <TextField
-          {...register("category")}
-          error={!!errors.category}
-          helperText={errors.category?.message}
-          label="Category"
-          defaultValue={activity?.category}
-        />
-        <TextField
-          {...register("date")}
-          error={!!errors.date}
-          helperText={errors.date?.message}
-          label="Date"
-          defaultValue={
-            activity?.date
-              ? new Date(activity.date).toISOString().split("T")[0]
-              : new Date().toISOString().split("T")[0]
-          }
-          type="date"
-        />
-        <TextField
-          {...register("city")}
-          error={!!errors.city}
-          helperText={errors.city?.message}
-          label="City"
-          defaultValue={activity?.city}
-        />
-        <TextField
-          {...register("venue")}
-          error={!!errors.venue}
-          helperText={errors.venue?.message}
-          label="Venue"
-          defaultValue={activity?.venue}
-        />
+        <TextInput label="Title" control={control} name="title" />
+        <TextInput label="Description" control={control} name="description" multiline row={3}/>
+        <TextInput label="Category" control={control} name="category" />
+        <TextInput label="Date" control={control} name="date" />
+        <TextInput label="City" control={control} name="city" />
+        <TextInput label="Venue" control={control} name="venue" />
         <Box display="flex" justifyContent="end" gap={3} marginTop={3}>
           <Button onClick={() => navigate("/activities")} color="inherit">
             Cancel
