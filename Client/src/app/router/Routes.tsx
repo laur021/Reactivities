@@ -2,9 +2,10 @@ import { createBrowserRouter } from "react-router";
 import ActivityForm from "../../features/Activities/ActivityForm";
 import ActivityDashboardPage from "../../features/Activities/dashboard/ActivityDashboardPage";
 import ActivityDetailPage from "../../features/Activities/details/ActivityDetailPage";
+import Counter from "../../features/counter/Counter";
+import TestErrors from "../../features/errors/TestErrors";
 import HomePage from "../../features/home/HomePage";
 import App from "../layout/App";
-import Counter from "../../features/counter/Counter";
 
 export const router = createBrowserRouter([
   {
@@ -17,6 +18,7 @@ export const router = createBrowserRouter([
       { path: "createActivity", element: <ActivityForm key="create" /> },
       { path: "manage/:id", element: <ActivityForm /> },
       { path: "counter", element: <Counter /> },
+      { path: "errors", element: <TestErrors /> },
     ],
   },
 ]);
