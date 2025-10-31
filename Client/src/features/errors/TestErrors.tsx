@@ -1,7 +1,7 @@
-import { Button, ButtonGroup, Typography } from "@mui/material";
+import { Alert, Button, ButtonGroup, Typography } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
-import agent from "../../lib/api/agent.ts";
 import { useState } from "react";
+import agent from "../../lib/api/agent.ts";
 
 export default function TestErrors() {
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
@@ -35,6 +35,12 @@ export default function TestErrors() {
         <Button onClick={() => handleError("buggy/server-error")}>Server error</Button>
         <Button onClick={() => handleError("buggy/unauthorised")}>Unauthorised</Button>
       </ButtonGroup>
+
+      {validationErrors.map((err, i) => (
+        <Alert key={i} severity="error">
+          {err}
+        </Alert>
+      ))}
     </>
   );
 }
