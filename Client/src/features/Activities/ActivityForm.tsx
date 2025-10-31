@@ -1,32 +1,21 @@
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
-import type { FormEvent } from "react";
+import { useEffect } from "react";
+import { useForm, type FieldValues } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 import { useActivities } from "../../lib/hooks/useActivities";
 
 export default function ActivityForm() {
   const navigate = useNavigate();
+  const { register, reset, handleSubmit } = useForm();
   const { id } = useParams();
   const { updateActivity, createActivity, activity, IsLoadingActivity } = useActivities(id);
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const data: { [key: string]: FormDataEntryValue } = {};
-    formData.forEach((value, key) => {
-      data[key] = value;
-    });
+  useEffect(() => {
+    if (activity) reset(activity);
+  }, [activity, reset]);
 
-    if (activity) {
-      data.id = activity.id;
-      await updateActivity.mutateAsync(data as unknown as Activity);
-      navigate(`/activities/${activity?.id}`);
-    } else {
-      await createActivity.mutateAsync(data as unknown as Activity, {
-        onSuccess: (id) => {
-          navigate(`/activities/${id}`);
-        },
-      });
-    }
+  const onSubmit = async (data: FieldValues) => {
+    console.log(data);
   };
 
   if (IsLoadingActivity) return <Typography>Loading activity...</Typography>;
@@ -36,18 +25,24 @@ export default function ActivityForm() {
       <Typography variant="h5" gutterBottom color="primary">
         {activity ? "Edit activity" : "Create activity"}
       </Typography>
-      <Box component="form" onSubmit={handleSubmit} display="flex" flexDirection="column" gap={3}>
-        <TextField name="title" label="Title" defaultValue={activity?.title} />
+      <Box
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        display="flex"
+        flexDirection="column"
+        gap={3}
+      >
+        <TextField {...register("title")} label="Title" defaultValue={activity?.title} />
         <TextField
-          name="description"
+          {...register("description")}
           label="Description"
           defaultValue={activity?.description}
           multiline
           rows={3}
         />
-        <TextField name="category" label="Category" defaultValue={activity?.category} />
+        <TextField {...register("category")} label="Category" defaultValue={activity?.category} />
         <TextField
-          name="date"
+          {...register("date")}
           label="Date"
           defaultValue={
             activity?.date
@@ -56,8 +51,8 @@ export default function ActivityForm() {
           }
           type="date"
         />
-        <TextField name="city" label="City" defaultValue={activity?.city} />
-        <TextField name="venue" label="Venue" defaultValue={activity?.venue} />
+        <TextField {...register("city")} label="City" defaultValue={activity?.city} />
+        <TextField {...register("civenuety")} label="Venue" defaultValue={activity?.venue} />
         <Box display="flex" justifyContent="end" gap={3} marginTop={3}>
           <Button onClick={() => navigate("/activities")} color="inherit">
             Cancel
