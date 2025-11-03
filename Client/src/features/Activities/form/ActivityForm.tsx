@@ -3,19 +3,26 @@ import { Box, Button, Paper, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
-import { useActivities } from "../../lib/hooks/useActivities";
-import { activitySchema, type ActivitySchema } from "../../lib/schemas/activitySchema";
-import TextInput from "../../shared/components/TextInput";
+import { useActivities } from "../../../lib/hooks/useActivities";
+import { activitySchema, type ActivitySchema } from "../../../lib/schemas/activitySchema";
+import DateTimeInput from "../../../shared/components/DateTimeInput";
+import SelectInput from "../../../shared/components/SelectInput";
+import TextInput from "../../../shared/components/TextInput";
+import { categoryOptions } from "./categoryOptions";
 
 export default function ActivityForm() {
   const navigate = useNavigate();
-  const {
-    control,
-    reset,
-    handleSubmit
-  } = useForm<ActivitySchema>({
+  const { control, reset, handleSubmit } = useForm<ActivitySchema>({
     mode: "onTouched",
     resolver: zodResolver(activitySchema),
+    defaultValues: {
+      title: "",
+      description: "",
+      category: "",
+      date: "",
+      city: "",
+      venue: "",
+    },
   });
   const { id } = useParams();
   const { updateActivity, createActivity, activity, IsLoadingActivity } = useActivities(id);
@@ -43,9 +50,9 @@ export default function ActivityForm() {
         gap={3}
       >
         <TextInput label="Title" control={control} name="title" />
-        <TextInput label="Description" control={control} name="description" multiline row={3}/>
-        <TextInput label="Category" control={control} name="category" />
-        <TextInput label="Date" control={control} name="date" />
+        <TextInput label="Description" control={control} name="description" multiline rows={3} />
+        <SelectInput items={categoryOptions} label="Category" control={control} name="category" />
+        <DateTimeInput label="Date" control={control} name="date" />
         <TextInput label="City" control={control} name="city" />
         <TextInput label="Venue" control={control} name="venue" />
         <Box display="flex" justifyContent="end" gap={3} marginTop={3}>
