@@ -29,12 +29,16 @@ type LocationIQSuggestion = {
 
 type LocationIQAddress = {
   name: string;
-  city: string;
+  house_number: string;
+  road: string;
+  neighbourhood?: string;
+  suburb?: string;
+  town?: string;
+  village?: string;
+  city?: string;
+  county?: string;
   state: string;
+  postcode: string;
   country: string;
   country_code: string;
-  suburb?: string;
-  county?: string;
-  postcode?: string;
 };
-

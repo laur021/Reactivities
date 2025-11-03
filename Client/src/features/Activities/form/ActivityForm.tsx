@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router";
 import { useActivities } from "../../../lib/hooks/useActivities";
 import { activitySchema, type ActivitySchema } from "../../../lib/schemas/activitySchema";
 import DateTimeInput from "../../../shared/components/DateTimeInput";
+import LocationInput from "../../../shared/components/LocationInput";
 import SelectInput from "../../../shared/components/SelectInput";
 import TextInput from "../../../shared/components/TextInput";
 import { categoryOptions } from "./categoryOptions";
@@ -15,14 +16,6 @@ export default function ActivityForm() {
   const { control, reset, handleSubmit } = useForm<ActivitySchema>({
     mode: "onTouched",
     resolver: zodResolver(activitySchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      category: "",
-      date: "",
-      city: "",
-      venue: "",
-    },
   });
   const { id } = useParams();
   const { updateActivity, createActivity, activity, IsLoadingActivity } = useActivities(id);
@@ -53,8 +46,7 @@ export default function ActivityForm() {
         <TextInput label="Description" control={control} name="description" multiline rows={3} />
         <SelectInput items={categoryOptions} label="Category" control={control} name="category" />
         <DateTimeInput label="Date" control={control} name="date" />
-        <TextInput label="City" control={control} name="city" />
-        <TextInput label="Venue" control={control} name="venue" />
+        <LocationInput label="Enter the location" control={control} name="location" />
         <Box display="flex" justifyContent="end" gap={3} marginTop={3}>
           <Button onClick={() => navigate("/activities")} color="inherit">
             Cancel

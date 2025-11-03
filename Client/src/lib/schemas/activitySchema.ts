@@ -1,20 +1,21 @@
 import { z } from "zod";
 
-const capitalizeFirstLetter = (str: string) => {
-  return str.charAt(0).toUpperCase() + str.slice(1).toLocaleLowerCase();
-};
-
-const requiredString = (fieldName: string) => {
-  return z.string().nonempty(`${capitalizeFirstLetter(fieldName)} is required`);
-};
+export const requiredString = (fieldName: string) =>
+  z
+    .string({ error: `${fieldName} is required` }) // ✅ handles undefined/null input
+    .min(1, { error: `${fieldName} is required` }); // ✅ handles empty string
 
 export const activitySchema = z.object({
-  title: requiredString("title"),
-  description: requiredString("description"),
-  category: requiredString("category"),
+  title: requiredString("Title"),
+  description: requiredString("Description"),
+  category: requiredString("Category"),
   date: z.coerce.date({ error: "Date is required" }),
-  city: requiredString("city"),
-  venue: requiredString("venue"),
+  location: z.object({
+    venue: requiredString("Venue"),
+    city: z.string().optional(),
+    latitude: z.coerce.number({ error: "Latitude is required" }),
+    longitude: z.coerce.number({ error: "Longitude is required" }),
+  }),
 });
 
 export type ActivitySchema = z.input<typeof activitySchema>;
