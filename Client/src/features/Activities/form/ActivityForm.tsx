@@ -21,11 +21,37 @@ export default function ActivityForm() {
   const { updateActivity, createActivity, activity, IsLoadingActivity } = useActivities(id);
 
   useEffect(() => {
-    if (activity) reset(activity);
+    if (activity)
+      reset({
+        ...activity,
+        location: {
+          city: activity.city,
+          venue: activity.venue,
+          latitude: activity.latitude,
+          longitude: activity.longitude,
+        },
+      });
   }, [activity, reset]);
 
   const onSubmit = async (data: ActivitySchema) => {
-    console.log(data);
+    const { location, ...rest } = data;
+    const flattenedData = { ...rest, ...location };
+    try {
+      if (activity) {
+        updateActivity.mutate(
+          { ...activity, ...flattenedData },
+          {
+            onSuccess: () => navigate(`/activities/${activity.id}`),
+          }
+        );
+      } else {
+        createActivity.mutate(flattenedData, {
+          onSuccess: (id) => navigate(`/activities/${id}`),
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   if (IsLoadingActivity) return <Typography>Loading activity...</Typography>;
@@ -44,8 +70,10 @@ export default function ActivityForm() {
       >
         <TextInput label="Title" control={control} name="title" />
         <TextInput label="Description" control={control} name="description" multiline rows={3} />
-        <SelectInput items={categoryOptions} label="Category" control={control} name="category" />
-        <DateTimeInput label="Date" control={control} name="date" />
+        <Box display="flex" gap={3}>
+          <SelectInput items={categoryOptions} label="Category" control={control} name="category" />
+          <DateTimeInput label="Date" control={control} name="date" />
+        </Box>
         <LocationInput label="Enter the location" control={control} name="location" />
         <Box display="flex" justifyContent="end" gap={3} marginTop={3}>
           <Button onClick={() => navigate("/activities")} color="inherit">
