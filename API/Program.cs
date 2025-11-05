@@ -2,7 +2,9 @@ using API.Middleware;
 using Application.Activities.Queries;
 using Application.Activities.Validators;
 using Application.Core;
+using Domain;
 using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -26,14 +28,23 @@ builder.Services.AddMediatR(x =>
 builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 builder.Services.AddValidatorsFromAssemblyContaining<CreateActivityValidator>();
 builder.Services.AddTransient<ExceptionMiddleware>();
+builder.Services.AddIdentityApiEndpoints<User>(opt =>
+{
+    opt.User.RequireUniqueEmail = true;
+})
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<AppDbContext>();
 
 var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors(x => x.AllowAnyHeader()
                 .AllowAnyMethod()
                 .WithOrigins("http://localhost:3000", "https://localhost:3000"));
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
+app.MapGroup("api").MapIdentityApi<User>();
 
 /*Now, what this means is that when this method, when this function goes outside of scope, as in we then run our application. Anything that we use inside here is going to be disposed of by the framework. And it's not something that we need to clean up after ourselves because we're using this using keyword.
 */
@@ -46,8 +57,9 @@ try
     /*
         This asynchronously applies any pending migrations for the context to the database. And it will create the create the database if it does not already exist. So when we effectively start our application, then this command is going to be called. Any pending migrations will be applied. And if the database hasn't been created yet it's going to create that for us. And then we'll see our data in.
     */
+    var userManager = services.GetRequiredService<UserManager<User>>();
     await context.Database.MigrateAsync();
-    await DbInitializer.SeedData(context);
+    await DbInitializer.SeedData(context, userManager);
 }
 catch (Exception ex)
 {
