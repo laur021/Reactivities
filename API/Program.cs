@@ -18,6 +18,7 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddCors();
+builder.Services.AddEndpointsApiExplorer();
 
 //Scan the assembly (DLL) where GetActivityList.Handler is defined, and automatically register all request and notification handlers inside it.
 builder.Services.AddMediatR(x =>
@@ -40,6 +41,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors(x => x.AllowAnyHeader()
                 .AllowAnyMethod()
                 .WithOrigins("http://localhost:3000", "https://localhost:3000"));
+
 app.UseAuthentication();
 app.UseAuthorization();
 
