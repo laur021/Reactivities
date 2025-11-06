@@ -2,12 +2,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LockOpen } from "@mui/icons-material";
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
+import { useLocation, useNavigate } from "react-router";
 import { useAccount } from "../../lib/hooks/useAccount";
 import { loginSchema, type LoginSchema } from "../../lib/schemas/loginSchema";
 import TextInput from "../../shared/components/TextInput";
 
 export default function LoginForm() {
   const { loginUser } = useAccount();
+  const navigate = useNavigate();
+  const location = useLocation();
   const {
     control,
     handleSubmit,
@@ -18,7 +21,11 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (data: LoginSchema) => {
-    await loginUser.mutateAsync(data);
+    await loginUser.mutateAsync(data, {
+      onSuccess: () => {
+        navigate(location.state.from || "/activities"); // Redirects user to originally requested route after login, or to /activities by default.
+      },
+    });
   };
   return (
     <Paper
