@@ -1,4 +1,5 @@
 import { createBrowserRouter, Navigate } from "react-router";
+import LoginForm from "../../features/account/LoginForm";
 import ActivityDashboardPage from "../../features/Activities/dashboard/ActivityDashboardPage";
 import ActivityDetailPage from "../../features/Activities/details/ActivityDetailPage";
 import ActivityForm from "../../features/Activities/form/ActivityForm";
@@ -23,6 +24,7 @@ export const router = createBrowserRouter([
       { path: "errors", element: <TestErrors /> },
       { path: "not-found", element: <NotFound /> },
       { path: "server-error", element: <ServerError /> },
+      { path: "login", element: <LoginForm /> },
       { path: "*", element: <Navigate replace to="/not-found" /> },
     ],
   },
