@@ -11,11 +11,14 @@ import {
 } from "@mui/material";
 import { Observer } from "mobx-react-lite";
 import { NavLink } from "react-router";
+import { useAccount } from "../../lib/hooks/useAccount";
 import { useStore } from "../../lib/hooks/useStore";
 import MenuItemLink from "../../shared/components/MenuItemLink";
 
 export default function NavBar() {
   const { uiStore } = useStore();
+  const { currentUser } = useAccount();
+
   return (
     <>
       <CssBaseline />
@@ -42,7 +45,16 @@ export default function NavBar() {
                 <MenuItemLink to="/counter">Counter</MenuItemLink>
                 <MenuItemLink to="/errors">Errors</MenuItemLink>
               </Box>
-              <MenuItem>User Menu</MenuItem>
+              <Box display="flex" alignItems="center">
+                {currentUser ? (
+                  <Typography>Welcome {currentUser.displayName}</Typography>
+                ) : (
+                  <>
+                    <MenuItemLink to="/login">Login</MenuItemLink>
+                    <MenuItemLink to="/register">Register</MenuItemLink>
+                  </>
+                )}
+              </Box>
             </Toolbar>
           </Container>
           <Observer>

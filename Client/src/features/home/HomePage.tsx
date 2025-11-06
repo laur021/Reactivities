@@ -33,7 +33,7 @@ export default function HomePage() {
       <Typography variant="h2">Welcome to Reactivities</Typography>
       <Button
         component={Link}
-        to="/activities"
+        to="/login"
         size="large"
         variant="contained"
         sx={{ height: 80, borderRadius: 4, fontSize: "1.5rem" }}
