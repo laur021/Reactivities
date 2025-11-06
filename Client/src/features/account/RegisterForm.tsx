@@ -2,30 +2,24 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LockOpen } from "@mui/icons-material";
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { useAccount } from "../../lib/hooks/useAccount";
-import { loginSchema, type LoginSchema } from "../../lib/schemas/loginSchema";
+import { registerSchema, type RegisterSchema } from "../../lib/schemas/registerSchema";
 import TextInput from "../../shared/components/TextInput";
 
-export default function LoginForm() {
-  const { loginUser } = useAccount();
-  const navigate = useNavigate();
-  const location = useLocation();
+export default function RegisterForm() {
+  const { registerUser } = useAccount();
   const {
     control,
     handleSubmit,
     formState: { isValid, isSubmitting },
-  } = useForm<LoginSchema>({
+  } = useForm<RegisterSchema>({
     mode: "onTouched",
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = async (data: LoginSchema) => {
-    await loginUser.mutateAsync(data, {
-      onSuccess: () => {
-        navigate(location.state.from || "/activities"); // Redirects user to originally requested route after login, or to /activities by default.
-      },
-    });
+  const onSubmit = async (data: RegisterSchema) => {
+    await registerUser.mutateAsync(data);
   };
   return (
     <Paper
@@ -40,6 +34,7 @@ export default function LoginForm() {
         mx: "auto",
         borderRadius: "3",
       }}
+      autoComplete="off"
     >
       <Box
         display="flex"
@@ -49,17 +44,24 @@ export default function LoginForm() {
         color="secondary.main"
       >
         <LockOpen fontSize="large" />
-        <Typography variant="h4">Sign in</Typography>
+        <Typography variant="h4">Register</Typography>
       </Box>
-      <TextInput label="Email" control={control} name="email"></TextInput>
-      <TextInput label="Password" control={control} name="password" type="Password"></TextInput>
+      <TextInput label="Email" control={control} name="email" autoComplete="new-email" />
+      <TextInput label="Display name" control={control} name="displayName" />
+      <TextInput
+        label="Password"
+        control={control}
+        name="password"
+        type="Password"
+        autoComplete="new-password"
+      />
       <Button type="submit" disabled={!isValid || isSubmitting} variant="contained" size="large">
-        Login
+        Register
       </Button>
       <Typography sx={{ textAlign: "center" }}>
-        Don't have an account?
-        <Typography component={Link} to="/register" color="primary" sx={{ ml: 2 }}>
-          Sign up
+        Already have an account?
+        <Typography component={Link} to="/login" color="primary" sx={{ ml: 2 }}>
+          Sign in
         </Typography>
       </Typography>
     </Paper>

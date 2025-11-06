@@ -1,5 +1,6 @@
 import { createBrowserRouter, Navigate } from "react-router";
 import LoginForm from "../../features/account/LoginForm";
+import RegisterForm from "../../features/account/RegisterForm";
 import ActivityDashboardPage from "../../features/Activities/dashboard/ActivityDashboardPage";
 import ActivityDetailPage from "../../features/Activities/details/ActivityDetailPage";
 import ActivityForm from "../../features/Activities/form/ActivityForm";
@@ -31,6 +32,7 @@ export const router = createBrowserRouter([
       { path: "not-found", element: <NotFound /> },
       { path: "server-error", element: <ServerError /> },
       { path: "login", element: <LoginForm /> },
+      { path: "register", element: <RegisterForm /> },
       { path: "*", element: <Navigate replace to="/not-found" /> },
     ],
   },
