@@ -14,6 +14,7 @@ import { NavLink } from "react-router";
 import { useAccount } from "../../lib/hooks/useAccount";
 import { useStore } from "../../lib/hooks/useStore";
 import MenuItemLink from "../../shared/components/MenuItemLink";
+import UserMenu from "./UserMenu";
 
 export default function NavBar() {
   const { uiStore } = useStore();
@@ -41,13 +42,12 @@ export default function NavBar() {
               </Box>
               <Box sx={{ display: "flex", justifyContent: "space-between", gap: 4 }}>
                 <MenuItemLink to="/activities">Activities</MenuItemLink>
-                <MenuItemLink to="/createActivity">Create Activity</MenuItemLink>
                 <MenuItemLink to="/counter">Counter</MenuItemLink>
                 <MenuItemLink to="/errors">Errors</MenuItemLink>
               </Box>
               <Box display="flex" alignItems="center">
                 {currentUser ? (
-                  <Typography>Welcome {currentUser.displayName}</Typography>
+                  <UserMenu />
                 ) : (
                   <>
                     <MenuItemLink to="/login">Login</MenuItemLink>
