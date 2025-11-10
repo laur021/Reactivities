@@ -20,7 +20,10 @@ public class GetActivityDetail
         public async Task<Result<Activity>> Handle(Query request, CancellationToken cancellationToken)
         {
             //need ienclose sa [] ang keyvalue kasi merong isa pang parameter na cancellationtoken
-            var activity = await context.Activities.FindAsync([request.Id], cancellationToken);
+            var activity = await context.Activities
+                .Include(x => x.Attendees)
+                .ThenInclude(x => x.User)
+                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if (activity is null)
                 return Result<Activity>.Failure("Activity not found", 404);
