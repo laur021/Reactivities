@@ -12,7 +12,7 @@ namespace API.Controllers;
 public class ActivitiesController : BaseApiController
 {
     [HttpGet]
-    public async Task<ActionResult<List<Activity>>> GetActivitites()
+    public async Task<ActionResult<List<ActivityDto>>> GetActivitites()
     {
         return await Mediator.Send(new GetActivityList.Query());
     }

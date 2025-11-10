@@ -3,6 +3,7 @@ using System.Data.Common;
 using Application.Activities.DTOs;
 using Application.Core;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -23,14 +24,13 @@ public class GetActivityDetail
         {
             //need ienclose sa [] ang keyvalue kasi merong isa pang parameter na cancellationtoken
             var activity = await context.Activities
-                .Include(x => x.Attendees)
-                .ThenInclude(x => x.User)
+                .ProjectTo<ActivityDto>(mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if (activity is null)
                 return Result<ActivityDto>.Failure("Activity not found", 404);
 
-            return Result<ActivityDto>.Success(mapper.Map<ActivityDto>(activity));
+            return Result<ActivityDto>.Success(activity);
         }
     }
 }
