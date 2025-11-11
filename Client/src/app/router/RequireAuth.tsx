@@ -7,7 +7,7 @@ export default function RequireAuth() {
   const location = useLocation();
 
   if (loadingUserInfo) return <Typography>Loading...</Typography>;
-  if (!currentUser) return <Navigate to="/login" state={{ from: location }} />; // redirect to login, In other words — this is like leaving a sticky note saying, “User was trying to go to /createActivity — once logged in, send them back there.”
+  if (!currentUser) return <Navigate to="/login" state={{ from: location }} replace />; // redirect to login, In other words — this is like leaving a sticky note saying, “User was trying to go to /createActivity — once logged in, send them back there.”
 
   return <Outlet />; // render protected children if authenticated
 }

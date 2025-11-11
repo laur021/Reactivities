@@ -15,9 +15,20 @@ export const useAccount = () => {
       await agent.post("/login?useCookies=true", creds);
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({ queryKey: ["user"] });
+      const user = await queryClient.fetchQuery({
         queryKey: ["user"],
+        queryFn: async () => {
+          const response = await agent.get<User>(`/account/user-info`);
+          return response.data;
+        },
       });
+
+      // Only navigate if we successfully got user data
+      if (user) {
+        const from = location.state?.from?.pathname || "/activities";
+        navigate(from, { replace: true });
+      }
     },
   });
 
