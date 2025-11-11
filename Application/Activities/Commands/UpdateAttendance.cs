@@ -1,6 +1,7 @@
 using System;
 using Application.Core;
 using Application.Interfaces;
+using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -31,9 +32,30 @@ public class UpdateAttendance
 
             var attendance = activity.Attendees.FirstOrDefault(x => x.UserId == user.Id);
 
-            var IsHost = activity.Attendees.Any(x => x.IsHost && x.UserId == user.Id);
+            var isHost = activity.Attendees.Any(x => x.IsHost && x.UserId == user.Id);
 
-            if(attendance is not null)
+            if (attendance is not null)
+            {
+                if (isHost)
+                    activity.IsCancelled = !activity.IsCancelled;
+                else
+                    activity.Attendees.Remove(attendance);
+            }
+            else
+            {
+                activity.Attendees.Add(new ActivityAttendee
+                {
+                    UserId = user.Id,
+                    ActivityId = activity.Id,
+                    IsHost = false
+                });
+            }
+
+            var result = await context.SaveChangesAsync(cancellationToken) > 0;
+
+            return result
+                ? Result<Unit>.Success(Unit.Value)
+                : Result<Unit>.Failure("Problem updating the DB", 400);
         }
     }
 }
