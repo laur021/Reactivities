@@ -1,8 +1,10 @@
 import { Group } from "@mui/icons-material";
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { Link } from "react-router";
+import { useAccount } from "../../lib/hooks/useAccount";
 
 export default function HomePage() {
+  const { currentUser } = useAccount();
   return (
     <Paper
       sx={{
@@ -33,7 +35,8 @@ export default function HomePage() {
       <Typography variant="h2">Welcome to Reactivities</Typography>
       <Button
         component={Link}
-        to="/login"
+        to={currentUser ? "/activities" : "/login"}
+        state={currentUser ? undefined : { from: "/activities" }}
         size="large"
         variant="contained"
         sx={{ height: 80, borderRadius: 4, fontSize: "1.5rem" }}
