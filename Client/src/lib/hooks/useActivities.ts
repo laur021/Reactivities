@@ -15,6 +15,15 @@ export const useActivities = (id?: string) => {
       return response.data;
     },
     enabled: !id && location.pathname === "/activities" && !!currentUser,
+    select: (data) => {
+      return data.map((activity) => {
+        return {
+          ...activity,
+          isHost: currentUser?.id === activity.hostId,
+          isGoing: activity.attendees.some((x) => x.id === currentUser?.id),
+        };
+      });
+    },
   });
 
   const { data: activity, isLoading: IsLoadingActivity } = useQuery({
@@ -24,6 +33,13 @@ export const useActivities = (id?: string) => {
       return response.data;
     },
     enabled: !!id && !!currentUser,
+    select: (data) => {
+      return {
+        ...data,
+        isHost: currentUser?.id === data.hostId,
+        isGoing: data.attendees.some((x) => x.id === currentUser?.id),
+      };
+    },
   });
 
   const updateActivity = useMutation({
