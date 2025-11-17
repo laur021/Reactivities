@@ -1,5 +1,6 @@
 import { Badge, Box, Button, Card, CardMedia, Typography } from "@mui/material";
 import { Link } from "react-router";
+import { useActivities } from "../../../lib/hooks/useActivities";
 import { formatDate } from "../../../lib/util/util";
 
 type Props = {
@@ -7,7 +8,7 @@ type Props = {
 };
 
 export default function ActivityDetailsHeader({ activity }: Props) {
-  const loading = false;
+  const { updateAttendance } = useActivities(activity.id);
 
   return (
     <Card sx={{ position: "relative", mb: 2, backgroundColor: "transparent", overflow: "hidden" }}>
@@ -47,7 +48,10 @@ export default function ActivityDetailsHeader({ activity }: Props) {
           <Typography variant="subtitle1">{formatDate(activity.date)}</Typography>
           <Typography variant="subtitle2">
             Hosted by{" "}
-            <Link to={`/profiles/${activity.hostId}`} style={{ color: "white", fontWeight: "bold" }}>
+            <Link
+              to={`/profiles/${activity.hostId}`}
+              style={{ color: "white", fontWeight: "bold" }}
+            >
               {activity.hostDisplayName}
             </Link>
           </Typography>
@@ -60,7 +64,8 @@ export default function ActivityDetailsHeader({ activity }: Props) {
               <Button
                 variant="contained"
                 color={activity.isCancelled ? "success" : "error"}
-                onClick={() => {}}
+                onClick={() => updateAttendance.mutate(activity.id)}
+                disabled={updateAttendance.isPending}
               >
                 {activity.isCancelled ? "Re-activate Activity" : "Cancel Activity"}
               </Button>
@@ -78,8 +83,8 @@ export default function ActivityDetailsHeader({ activity }: Props) {
             <Button
               variant="contained"
               color={activity.isGoing ? "primary" : "info"}
-              onClick={() => {}}
-              disabled={loading}
+              onClick={() => updateAttendance.mutate(activity.id)}
+              disabled={updateAttendance.isPending || activity.isCancelled}
             >
               {activity.isGoing ? "Cancel Attendance" : "Join Activity"}
             </Button>
