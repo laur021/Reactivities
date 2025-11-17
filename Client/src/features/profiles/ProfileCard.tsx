@@ -18,20 +18,20 @@ export default function ProfileCard({ profile }: Props) {
           sx={{ width: 200, zIndex: 50 }}
           alt={profile.displayName + "image"}
         />
-      </Card>
-      <CardContent>
-        <Box display="flex" alignItems="center" gap={1}>
-          <Typography variant="h5">{profile.displayName}</Typography>
-          {following && (
-            <Chip size="small" label="Following" color="secondary" variant="outlined" />
-          )}
+        <CardContent>
+          <Box display="flex" alignItems="center" gap={1}>
+            <Typography variant="h5">{profile.displayName}</Typography>
+            {following && (
+              <Chip size="small" label="Following" color="secondary" variant="outlined" />
+            )}
+          </Box>
+        </CardContent>
+        <Divider sx={{ mb: 2 }} />
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "start" }}>
+          <Person />
+          <Typography sx={{ ml: 1 }}>200 Followers</Typography>
         </Box>
-      </CardContent>
-      <Divider sx={{ mb: 2 }} />
-      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "start" }}>
-        <Person />
-        <Typography sx={{ ml: 1 }}>200 Followers</Typography>
-      </Box>
+      </Card>
     </Link>
   );
 }

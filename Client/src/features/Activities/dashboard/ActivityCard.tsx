@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { Link } from "react-router";
 import { formatDate } from "../../../lib/util/util";
+import AvatarPopover from "../../../shared/components/AvatarPopOver";
 
 type Props = {
   activity: Activity;
@@ -41,7 +42,7 @@ export default function ActivityCard({ activity }: Props) {
         ></CardHeader>
         <Box display="flex" flexDirection="column" gap={2} mr={2}>
           {(activity.isHost || activity.isGoing) && (
-            <Chip label={label} color={color} sx={{ borderRadius: 2 }} />
+            <Chip label={label} color={color} sx={{ borderRadius: 2 }} variant="outlined" />
           )}
           {activity.isCancelled && (
             <Chip label="Cancelled" color="error" sx={{ borderRadius: 2 }} />
@@ -63,13 +64,7 @@ export default function ActivityCard({ activity }: Props) {
         <Divider />
         <Box display="flex" gap={3} sx={{ backgroundColor: "grey.200", py: 3, pl: 3 }}>
           {activity.attendees.map((att) => (
-            <Avatar
-              key={att.id}
-              alt={att.displayName + "image"}
-              src={att.imageUrl}
-              component={Link}
-              to={`/profiles/${att.id}`}
-            />
+            <AvatarPopover profile={att} key={att.id} />
           ))}
         </Box>
       </CardContent>
