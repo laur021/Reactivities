@@ -41,8 +41,8 @@ export default function ActivityDetailsInfo({ activity }: Props) {
           </Typography>
           <Button
             onClick={() => setMapOpen(!mapOpen)}
-            sx={{ mr: 2, whiteSpace: "nowrap" }}
-            variant="outlined"
+            sx={{ mx: 2, whiteSpace: "nowrap" }}
+            variant="text"
           >
             {mapOpen ? "Hide map" : "Show map"}
           </Button>
