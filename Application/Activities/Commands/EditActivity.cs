@@ -29,7 +29,7 @@ public class EditActivity
             var result = await context.SaveChangesAsync(cancellationToken) > 0;
 
             if (!result)
-                return Result<Unit>.Failure("Failed to edit the activity", 404);
+                return Result<Unit>.Failure("Failed to edit the activity", 400);
 
             return Result<Unit>.Success(Unit.Value);
         }
